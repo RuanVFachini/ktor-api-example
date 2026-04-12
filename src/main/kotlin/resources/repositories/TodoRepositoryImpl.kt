@@ -7,6 +7,7 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 private fun toDomain(row: ResultRow) = TodoModel(
@@ -22,7 +23,7 @@ class TodoRepositoryImpl(
 ): TodoRepository {
 
     override suspend fun save(todo: TodoModel): TodoModel {
-        transaction {
+        suspendTransaction {
             todo.id = Todos.insert {
                 it[Todos.title] = todo.title
                 it[Todos.description] = todo.description
@@ -36,8 +37,8 @@ class TodoRepositoryImpl(
     }
 
     override suspend fun all(): List<TodoModel> {
-        return transaction {
-            return@transaction Todos.selectAll().map { toDomain(it) }
+        return suspendTransaction {
+            return@suspendTransaction Todos.selectAll().map { toDomain(it) }
         }
     }
 }
