@@ -1,0 +1,32 @@
+package com.example
+
+import com.example.application.web.controllers.TodoController
+import com.example.domain.repositories.TodoRepository
+import com.example.resources.config.configureDatabases
+import com.example.resources.repositories.TodoRepositoryImpl
+import io.ktor.server.application.*
+import io.ktor.server.config.ApplicationConfig
+import io.ktor.server.plugins.di.dependencies
+import org.jetbrains.exposed.v1.jdbc.Database
+
+fun Application.configureDependencyInjection(config: ApplicationConfig) {
+
+    dependencies {
+        //Controllers
+        provide(TodoController::class)
+
+        //repositories
+        provide<TodoRepository>(TodoRepositoryImpl::class)
+
+        //Databases
+        provide<Database> {
+
+            configureDatabases(
+                config.property("database.url").getString(),
+                config.property("database.user").getString(),
+                config.property("database.driver").getString(),
+                config.property("database.password").getString(),
+            )
+        }
+    }
+}
