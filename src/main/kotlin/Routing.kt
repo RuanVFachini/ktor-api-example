@@ -1,19 +1,19 @@
 package com.example
 
+import application.web.extensions.toResponse
 import com.example.application.web.controllers.TodoController
-import com.example.resources.repositories.TodoRepositoryImpl
-import io.ktor.http.*
-import io.ktor.openapi.*
+import com.example.application.web.requests.TodoRequest
+import com.example.application.web.requests.TodoResponse
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.di.dependencies
-import io.ktor.server.plugins.openapi.*
 import io.ktor.server.plugins.requestvalidation.RequestValidation
 import io.ktor.server.plugins.requestvalidation.ValidationResult
-import io.ktor.server.plugins.swagger.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import io.ktor.server.response.respond
 import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
@@ -33,12 +33,18 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
 
+
         route("/todos") {
             get {
-                dependencies.resolve<TodoController>().all(call)
+                val controller = dependencies.resolve<TodoController>()
+                val collection: List<TodoResponse> = controller.all()
+                call.respond(HttpStatusCode.OK, collection)
             }
             post {
-                dependencies.resolve<TodoController>().save(call)
+                val request: TodoRequest = call.receive<TodoRequest>()
+                val controller = dependencies.resolve<TodoController>()
+                val response: TodoResponse  = controller.save(request).toResponse()
+                call.respond<TodoResponse>(HttpStatusCode.Created, response)
             }
         }
     }

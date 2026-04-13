@@ -12,16 +12,23 @@ import io.ktor.server.plugins.swagger.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.routing.openapi.OpenApiDocSource
 
 fun Application.configureHTTP() {
     routing {
         openAPI(path = "openapi") {
             info = OpenApiInfo(title = "My API", version = "1.0.0")
+            source = OpenApiDocSource.Routing(ContentType.Application.Json) {
+                routingRoot.descendants()
+            }
         }
     }
     routing {
         swaggerUI(path = "openapi") {
             info = OpenApiInfo(title = "My API", version = "1.0.0")
+            source = OpenApiDocSource.Routing(ContentType.Application.Json) {
+                routingRoot.descendants()
+            }
         }
     }
 }
