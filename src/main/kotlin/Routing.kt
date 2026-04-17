@@ -1,5 +1,6 @@
 package com.example
 
+import application.web.controllers.ProcessController
 import application.web.extensions.toResponse
 import com.example.application.web.controllers.TodoController
 import com.example.application.web.requests.TodoRequest
@@ -47,5 +48,14 @@ fun Application.configureRouting() {
                 call.respond<TodoResponse>(HttpStatusCode.Created, response)
             }
         }
+
+        route("/process") {
+            post("/enqueue") {
+                val controller = dependencies.resolve<ProcessController>()
+                controller.enqueueProcess()
+                call.respond(HttpStatusCode.Accepted)
+            }
+        }
+
     }
 }

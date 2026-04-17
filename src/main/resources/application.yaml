@@ -11,3 +11,7 @@ database:
   user: root
   driver: org.h2.Driver
   password: ''
+
+aws:
+  queues:
+    process:
