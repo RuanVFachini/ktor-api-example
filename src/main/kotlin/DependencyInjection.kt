@@ -10,6 +10,7 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.plugins.di.provide
 import org.jetbrains.exposed.v1.jdbc.Database
+import resources.aws.sqs.ProcessSqsListener
 import resources.aws.sqs.SqsClientFactory
 import resources.config.AwsConfig
 
@@ -25,6 +26,7 @@ fun Application.configureDependencyInjection(config: ApplicationConfig) {
                 config.property("aws.queues.process").getString()
             )
         }
+        provide(ProcessSqsListener::class)
 
         //repositories
         provide<TodoRepository>(TodoRepositoryImpl::class)
