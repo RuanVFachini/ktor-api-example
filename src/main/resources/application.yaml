@@ -14,4 +14,4 @@ database:
 
 aws:
   queues:
-    process:
+    process: http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/process.fifo

@@ -1,4 +1,5 @@
 #!/bin/bash
 
-echo "teste"
-awslocal s3 mb s3://mysamplebucket
+awslocal sqs create-queue \
+  --queue-name process.fifo \
+  --attributes "FifoQueue=true"
