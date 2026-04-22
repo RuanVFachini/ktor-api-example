@@ -11,6 +11,7 @@ import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.plugins.di.provide
 import org.jetbrains.exposed.v1.jdbc.Database
 import resources.aws.sqs.ProcessSqsListener
+import resources.aws.sqs.S3ClientFactory
 import resources.aws.sqs.SqsClientFactory
 import resources.config.AwsConfig
 
@@ -21,9 +22,11 @@ fun Application.configureDependencyInjection(config: ApplicationConfig) {
         provide(TodoController::class)
         provide(ProcessController::class)
         provide(SqsClientFactory::class)
+        provide(S3ClientFactory::class)
         provide<AwsConfig> {
             AwsConfig(
-                config.property("aws.queues.process").getString()
+                config.property("aws.queues.process").getString(),
+                config.property("aws.s3.process.name").getString()
             )
         }
         provide(ProcessSqsListener::class)

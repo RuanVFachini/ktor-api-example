@@ -13,5 +13,8 @@ database:
   password: ''
 
 aws:
+  s3:
+    process:
+      name: ${S3_BUCKET_PROCESS_NAME}
   queues:
-    process: http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/process.fifo
+    process: ${AWS_SQS_PROCESS_ENDPOINT}

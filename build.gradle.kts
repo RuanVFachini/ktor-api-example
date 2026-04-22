@@ -41,7 +41,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-server-config-yaml")
     implementation("aws.sdk.kotlin:sqs:1.0.0")
-
+    implementation("aws.sdk.kotlin:s3:1.0.0")
 
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

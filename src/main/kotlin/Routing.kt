@@ -50,9 +50,19 @@ fun Application.configureRouting() {
         }
 
         route("/process") {
-            post("/enqueue") {
+            post("{fileName}/upload") {
                 val controller = dependencies.resolve<ProcessController>()
-                controller.enqueueProcess()
+                val payload = call.receiveStream().readAllBytes()
+                val fileName = call.parameters["fileName"]
+                controller.upload(
+                    fileName,
+                    payload)
+                call.respond(HttpStatusCode.Accepted)
+            }
+            post("{id}/enqueue") {
+                val id = call.parameters["id"]
+                val controller = dependencies.resolve<ProcessController>()
+                controller.enqueueProcess(id)
                 call.respond(HttpStatusCode.Accepted)
             }
         }
